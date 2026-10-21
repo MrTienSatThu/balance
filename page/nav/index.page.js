@@ -256,7 +256,8 @@ Page(
 
     // ---------- Tuyến đường ----------
 
-    requestRoute(force) {
+    // `reroute`: tính lại từ vị trí hiện tại khi lệch tuyến, bỏ qua điểm đi đã chọn trong app Zepp.
+    requestRoute(force, reroute = false) {
       const now = Date.now()
       const { me, routeRequesting, lastRouteRequestAt } = this.state
       if (!me || routeRequesting) return
@@ -267,7 +268,7 @@ Page(
       this.state.lastRouteRequestAt = now
       const startedAt = now
 
-      this.request({ method: METHOD.ROUTE, params: { from: { lat: me[0], lon: me[1] } } })
+      this.request({ method: METHOD.ROUTE, params: { from: { lat: me[0], lon: me[1] }, reroute } })
         .then((route) => {
           const rttMs = Date.now() - startedAt
           const bytes = JSON.stringify(route).length
@@ -313,7 +314,7 @@ Page(
         if (this.state.offRouteCount === OFF_ROUTE_FIXES) {
           this.state.vibrator.start({ mode: VIBRATOR_SCENE_STRONG_REMINDER })
         }
-        if (this.state.offRouteCount >= OFF_ROUTE_FIXES) this.requestRoute(false)
+        if (this.state.offRouteCount >= OFF_ROUTE_FIXES) this.requestRoute(false, true)
       } else {
         this.state.offRouteCount = 0
       }

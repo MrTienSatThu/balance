@@ -31,3 +31,21 @@ test('từ chối chuỗi không có toạ độ hoặc toạ độ sai', () => 
   assert.equal(parseDestination('95, 105'), null)
   assert.equal(parseDestination(undefined), null)
 })
+
+import { readPlace } from '../shared/destination.js'
+
+test('readPlace đọc JSON địa điểm đã chọn', () => {
+  assert.deepEqual(readPlace('{"name":"Hồ Gươm","lat":21.0287,"lon":105.8521}'), {
+    name: 'Hồ Gươm',
+    lat: 21.0287,
+    lon: 105.8521
+  })
+})
+
+test('readPlace vẫn đọc toạ độ dạng cũ và từ chối dữ liệu hỏng', () => {
+  assert.deepEqual(readPlace('21.03, 105.85'), { name: '', lat: 21.03, lon: 105.85 })
+  assert.equal(readPlace('{"name":"x"}'), null)
+  assert.equal(readPlace('{hỏng'), null)
+  assert.equal(readPlace(''), null)
+  assert.equal(readPlace(null), null)
+})

@@ -8,7 +8,17 @@ export const METHOD = {
 }
 
 export const SETTINGS_KEY = {
+  // Địa điểm đã chọn, lưu dạng JSON { name, lat, lon }. Điểm đi để trống = vị trí GPS hiện tại.
+  ORIGIN: 'origin',
   DESTINATION: 'destination',
+  // Chuỗi tìm kiếm người dùng gõ trong trang cài đặt; Side Service tìm rồi ghi kết quả.
+  ORIGIN_QUERY: 'origin.query',
+  DESTINATION_QUERY: 'destination.query',
+  // Kết quả tìm, JSON { query, status: 'loading' | 'ok' | 'empty' | 'error', items, error }
+  ORIGIN_RESULTS: 'origin.results',
+  DESTINATION_RESULTS: 'destination.results',
+  // Vị trí gần nhất đồng hồ gửi lên, dùng để ưu tiên kết quả tìm ở gần.
+  LAST_POSITION: 'lastPosition',
   MODE: 'mode'
 }
 

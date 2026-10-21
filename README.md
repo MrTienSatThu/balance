@@ -33,12 +33,20 @@ nghiệm. Nếu vẫn bị từ chối, hãy tạo mini program trên trang nhà
 
 ## Dùng thử
 
-1. Trong app Zepp, mở trang cài đặt của Balance Nav, dán điểm đến: toạ độ dạng `21.0285, 105.8542`
-   hoặc link Google Maps dạng dài (có `@lat,lon` hoặc `!3d...!4d...`). Link rút gọn `maps.app.goo.gl`
-   chưa được hỗ trợ.
-2. Chọn phương tiện: Xe máy, Ô tô hoặc Đi bộ.
-3. Mở app trên đồng hồ ở ngoài trời, chờ GPS. Tuyến được tính tự động khi có vị trí.
-4. Chạm vào bản đồ để đổi mức thu phóng (1, 2, 4, 8 m/px).
+1. Trong app Zepp, mở trang cài đặt của Balance Nav.
+2. **Điểm đi:** để trống thì dùng vị trí GPS hiện tại của đồng hồ. Muốn đi từ nơi khác, gõ tên địa điểm
+   vào ô tìm rồi chạm chọn một kết quả.
+3. **Điểm đến:** gõ tên địa điểm (ví dụ `Hồ Gươm, Hà Nội`), chờ kết quả hiện ra rồi chạm để chọn.
+   Ô tìm cũng nhận toạ độ `21.0285, 105.8542` hoặc link Google Maps dạng dài.
+4. Chọn phương tiện: Xe máy, Ô tô hoặc Đi bộ.
+5. Mở app trên đồng hồ ở ngoài trời, chờ GPS. Tuyến được tính tự động khi có vị trí.
+6. Chạm vào bản đồ để đổi mức thu phóng (1, 2, 4, 8 m/px).
+
+Tìm địa điểm dùng Nominatim của OpenStreetMap: mỗi lần tìm là một yêu cầu, không tìm-khi-gõ, tối đa
+1 yêu cầu/giây, kết quả được lưu đệm. Địa chỉ số nhà ở Việt Nam trên OpenStreetMap còn thiếu nhiều, nên
+tìm theo tên địa điểm, tên đường hoặc thêm tên quận, thành phố sẽ dễ ra kết quả hơn.
+
+Khi lệch tuyến, tuyến được tính lại từ vị trí hiện tại tới điểm đến.
 
 ## Số đo của bản thử M1
 
@@ -54,6 +62,7 @@ Dòng chữ nhỏ ở cuối màn hình đồng hồ:
 ## Dữ liệu và điều khoản
 
 - Dữ liệu bản đồ © OpenStreetMap contributors (ODbL).
+- Tìm địa điểm: Nominatim (`nominatim.openstreetmap.org`), theo chính sách sử dụng của OSMF.
 - Tính tuyến: máy chủ demo Valhalla của FOSSGIS (`valhalla1.openstreetmap.de`), chỉ dùng thử nghiệm,
   gọi thưa.
 - Không dùng dữ liệu hay API của Google Maps.

@@ -29,3 +29,20 @@ export function isValidLatLon(lat, lon) {
     Number.isFinite(lat) && Number.isFinite(lon) && lat >= -90 && lat <= 90 && lon >= -180 && lon <= 180
   )
 }
+
+// Đọc địa điểm đã lưu trong Settings Storage: JSON { name, lat, lon },
+// hoặc chuỗi toạ độ / link Google Maps (dạng cũ). Trả về null nếu không hợp lệ.
+export function readPlace(stored) {
+  if (!stored) return null
+  if (typeof stored === 'string' && stored.trim().charAt(0) === '{') {
+    try {
+      const p = JSON.parse(stored)
+      if (p && isValidLatLon(p.lat, p.lon)) return { name: p.name || '', lat: p.lat, lon: p.lon }
+    } catch (e) {
+      return null
+    }
+    return null
+  }
+  const coords = parseDestination(stored)
+  return coords ? { name: '', lat: coords.lat, lon: coords.lon } : null
+}
