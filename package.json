@@ -1,0 +1,19 @@
+{
+  "name": "balance-nav",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Zepp OS mini program: OpenStreetMap navigation for Amazfit Balance",
+  "main": "app.js",
+  "scripts": {
+    "test": "node --test test/*.test.js",
+    "build": "zeus build",
+    "preview": "zeus preview"
+  },
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "@zeppos/device-types": "^4.0.0"
+  },
+  "dependencies": {
+    "@zeppos/zml": "^0.0.43"
+  }
+}

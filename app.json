@@ -1,0 +1,54 @@
+{
+  "configVersion": "v3",
+  "app": {
+    "appId": 1000001,
+    "appName": "Balance Nav",
+    "appType": "app",
+    "version": {
+      "code": 1,
+      "name": "0.1.0"
+    },
+    "icon": "icon.png",
+    "vender": "personal",
+    "description": "Bản đồ dẫn đường OpenStreetMap cho Amazfit Balance"
+  },
+  "permissions": ["data:os.device.info", "device:os.geolocation", "device:os.local_storage"],
+  "runtime": {
+    "apiVersion": {
+      "compatible": "3.6",
+      "target": "3.7",
+      "minVersion": "3.6"
+    }
+  },
+  "targets": {
+    "balance": {
+      "module": {
+        "page": {
+          "pages": ["page/nav/index.page"]
+        },
+        "app-side": {
+          "path": "app-side/index"
+        },
+        "setting": {
+          "path": "setting/index"
+        }
+      },
+      "platforms": [
+        {
+          "st": "r",
+          "dw": 480
+        }
+      ]
+    }
+  },
+  "i18n": {
+    "en-US": {
+      "appName": "Balance Nav"
+    },
+    "vi-VN": {
+      "appName": "Balance Nav"
+    }
+  },
+  "defaultLanguage": "en-US",
+  "debug": false
+}
