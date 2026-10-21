@@ -28,8 +28,8 @@ Cần máy tính có Node.js 18 trở lên.
 
 Nguồn: https://docs.zepp.com/docs/guides/quick-start/preview/
 
-`appId` trong `app.json` đang là giá trị tạm (1000001). Nếu `zeus preview` từ chối, hãy tạo một mini
-program trên trang nhà phát triển Zepp để lấy `appId` thật rồi thay vào.
+`appId` trong `app.json` (24183) nằm trong khoảng 20000–30000 mà `zeus create` tự sinh cho app thử
+nghiệm. Nếu vẫn bị từ chối, hãy tạo mini program trên trang nhà phát triển Zepp để lấy `appId` thật.
 
 ## Dùng thử
 
