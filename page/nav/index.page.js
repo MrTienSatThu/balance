@@ -23,6 +23,7 @@ const logger = Logger.getLogger('balance-nav')
 const ZOOM_LEVELS = [1, 2, 4, 8] // mét trên mỗi pixel
 const DEFAULT_ZOOM_INDEX = 1
 const PING_INTERVAL_MS = 15000
+const GPS_WAIT_POLL_MS = 1000
 const BRIGHT_TIME_MS = 10 * 60 * 1000
 const MIN_MOVE_FOR_HEADING_M = 5
 const OFF_ROUTE_M = 50
@@ -49,7 +50,11 @@ Page(
       geolocation: null,
       vibrator: null,
       onGeoChange: null,
+      onGnssChange: null,
       pingTimer: null,
+      gpsWaitTimer: null,
+      gpsStartedAt: 0,
+      gnss: null,
 
       me: null,
       lastHeadingPos: null,
@@ -101,11 +106,11 @@ Page(
 
       this.state.topText = hmUI.createWidget(hmUI.widget.TEXT, {
         x: 70,
-        y: 34,
+        y: 30,
         w: SCREEN - 140,
-        h: 96,
+        h: 120,
         color: 0xffffff,
-        text_size: 32,
+        text_size: 28,
         align_h: hmUI.align.CENTER_H,
         align_v: hmUI.align.CENTER_V,
         text_style: hmUI.text_style.WRAP,
@@ -141,12 +146,14 @@ Page(
 
     onDestroy() {
       logger.log('page onDestroy')
-      const { geolocation, onGeoChange, pingTimer } = this.state
+      const { geolocation, onGeoChange, onGnssChange, pingTimer, gpsWaitTimer } = this.state
       if (geolocation) {
         onGeoChange && geolocation.offChange(onGeoChange)
+        onGnssChange && geolocation.offGnssChange(onGnssChange)
         geolocation.stop()
       }
       pingTimer && clearInterval(pingTimer)
+      gpsWaitTimer && clearInterval(gpsWaitTimer)
       resetPageBrightTime()
       resetDropWristScreenOff()
     },
@@ -165,10 +172,45 @@ Page(
     startGps() {
       const geolocation = new Geolocation()
       const onGeoChange = () => this.onGps()
+      const onGnssChange = (info) => {
+        this.state.gnss = info
+      }
+      this.state.gpsStartedAt = Date.now()
       geolocation.start()
       geolocation.onChange(onGeoChange)
+      geolocation.onGnssChange(onGnssChange)
       this.state.geolocation = geolocation
       this.state.onGeoChange = onGeoChange
+      this.state.onGnssChange = onGnssChange
+
+      // Khi chưa có vị trí: cập nhật dòng trạng thái mỗi giây và tự đọc lại vị trí
+      // phòng trường hợp sự kiện onChange không được gọi.
+      this.state.gpsWaitTimer = setInterval(() => {
+        if (this.state.me) {
+          clearInterval(this.state.gpsWaitTimer)
+          this.state.gpsWaitTimer = null
+          return
+        }
+        this.onGps()
+        this.updateTexts()
+      }, GPS_WAIT_POLL_MS)
+    },
+
+    gpsWaitText() {
+      const s = this.state
+      const waitedS = Math.round((Date.now() - s.gpsStartedAt) / 1000)
+      let text = 'Đang chờ GPS ' + waitedS + 's'
+      const g = s.gnss
+      if (g) {
+        text += '\nVệ tinh: dùng ' + g.nb_used_satellite + ' / thấy ' + g.nb_valid_satellite
+        if (g.agps_inject_time) {
+          const ageH = Math.round((Date.now() - g.agps_inject_time) / 3600000)
+          text += '\nA-GPS cập nhật ' + ageH + ' giờ trước'
+        }
+      } else {
+        text += '\nChưa có dữ liệu vệ tinh'
+      }
+      return text
     },
 
     onGps() {
@@ -369,7 +411,7 @@ Page(
 
     updateTexts() {
       const s = this.state
-      let top = 'Đang chờ GPS...'
+      let top = this.gpsWaitText()
       let bottom = ''
 
       if (s.me) {
